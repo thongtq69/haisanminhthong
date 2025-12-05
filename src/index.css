@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-snow-bg text-gray-900;
+    scroll-behavior: smooth;
+  }
+  
+  * {
+    @apply transition-colors duration-200;
+  }
+}
+
+@layer utilities {
+  .snowflake {
+    position: absolute;
+    color: white;
+    font-size: 1em;
+    animation: snow linear infinite;
+    opacity: 0.7;
+  }
+  
+  .parallax-layer {
+    will-change: transform;
+  }
+  
+  /* Smooth scroll animations */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+  
+  /* Enhanced hover effects */
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+  }
+}
+
