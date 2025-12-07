@@ -47,7 +47,7 @@ const Footer = () => {
               className="flex items-center gap-2 mb-4"
             >
               <IconCrab className="w-8 h-8" />
-              <span className="text-2xl font-bold">Ghẹ Biển Noel</span>
+              <span className="text-2xl font-bold">Ghẹ Biển Hương Phi</span>
             </motion.div>
             <p className="text-gray-300 mb-4">
               Nguồn cung cấp ghẹ tươi và hải sản cao cấp đáng tin cậy của bạn. 
@@ -137,7 +137,7 @@ const Footer = () => {
               <h4 className="font-bold mb-2">Email</h4>
               <p className="text-gray-300">
                 <a href="mailto:info@ghebiennoel.com" className="hover:text-white transition-colors">
-                  info@ghebiennoel.com
+                  info@ghebienhuongphi.com
                 </a>
               </p>
             </div>
@@ -151,7 +151,7 @@ const Footer = () => {
           viewport={{ once: true }}
           className="border-t border-white/20 pt-8 mt-8 text-center text-gray-400"
         >
-          <p>&copy; 2024 Ghẹ Biển Noel. Tất cả quyền được bảo lưu.</p>
+          <p>&copy; 2024 Ghẹ Biển Hương Phi. Tất cả quyền được bảo lưu.</p>
         </motion.div>
       </div>
     </footer>
@@ -159,4 +159,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

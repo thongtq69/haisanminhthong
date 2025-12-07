@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { getCombos } from '../api/combos';
 import Button from './ui/Button';
 import { IconGift, IconBell, IconTree } from './ui/Icons';
 
@@ -29,35 +30,34 @@ const FlashSaleSection = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const combos = [
-    {
-      id: 1,
-      name: 'Combo Noel Gia Đình',
-      description: 'Hoàn hảo cho 4-6 người',
-      price: 1200000,
-      originalPrice: 1500000,
-      items: ['2kg Ghẹ Xanh', '1kg Ghẹ Đỏ', '500g Tôm', 'Canh Ghẹ'],
-      image: 'https://via.placeholder.com/400x300/E53935/FFFFFF?text=Combo+Noel+Gia+Dinh',
-    },
-    {
-      id: 2,
-      name: 'Combo Hải Sản Mùa Đông',
-      description: 'Lý tưởng cho tiệc tùng',
-      price: 1800000,
-      originalPrice: 2200000,
-      items: ['3kg Ghẹ Hỗn Hợp', '1kg Ghẹ Nướng', 'Đĩa Hải Sản', '2x Canh Ghẹ'],
-      image: 'https://via.placeholder.com/400x300/1565C0/FFFFFF?text=Combo+Hai+San+Mua+Dong',
-    },
-    {
-      id: 3,
-      name: 'Combo Noel Cao Cấp',
-      description: 'Tuyển chọn cao cấp',
-      price: 2500000,
-      originalPrice: 3200000,
-      items: ['4kg Ghẹ Cao Cấp', '2kg Ghẹ Tươi Sống', 'Đĩa Cao Cấp', 'Hộp Quà'],
-      image: 'https://via.placeholder.com/400x300/FF3B3F/FFFFFF?text=Combo+Noel+Cao+Cap',
-    },
-  ];
+  const [combos, setCombos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCombos = async () => {
+      try {
+        const data = await getCombos();
+        // Transform data to match FlashSaleSection format
+        const transformedData = (data || []).slice(0, 3).map((combo) => ({
+          id: combo._id,
+          name: combo.name,
+          description: (combo.description || '').substring(0, 50) + '...',
+          price: combo.price,
+          originalPrice: combo.originalPrice,
+          items: combo.products?.map((p) => `${p.quantity}x ${p.product?.name || 'Sản phẩm'}`) || [],
+          image: combo.images?.[0] || `https://via.placeholder.com/400x300/E53935/FFFFFF?text=${encodeURIComponent(combo.name)}`,
+        }));
+        setCombos(transformedData);
+      } catch (err) {
+        console.error('Error fetching combos:', err);
+        setCombos([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCombos();
+  }, []);
 
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
@@ -136,8 +136,13 @@ const FlashSaleSection = () => {
           </motion.div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {combos.map((combo, index) => (
+        {isLoading ? (
+          <div className="text-center py-12">
+            <p className="text-white">Đang tải combo...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {combos.map((combo, index) => (
             <motion.div
               key={combo.id}
               initial={{ opacity: 0, y: 50 }}
@@ -189,7 +194,8 @@ const FlashSaleSection = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   );

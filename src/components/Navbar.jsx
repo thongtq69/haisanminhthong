@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { IconCrab, IconBell } from './ui/Icons';
 import Badge from './ui/Badge';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,13 +18,66 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleLogoClick = () => {
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavClick = (href, e) => {
+    e.preventDefault();
+
+    // If it's a route (starts with /), use navigate
+    if (href.startsWith('/') && !href.startsWith('/#')) {
+      navigate(href);
+      return;
+    }
+
+    // Handle anchor links (#)
+    if (href.startsWith('#')) {
+      const sectionId = href.substring(1); // Remove #
+
+      // If not on homepage, navigate to homepage first
+      if (!isHomePage) {
+        navigate('/');
+        // Wait for navigation to complete, then scroll
+        setTimeout(() => {
+          scrollToSection(sectionId);
+        }, 100);
+      } else {
+        // Already on homepage, just scroll
+        scrollToSection(sectionId);
+      }
+      return;
+    }
+
+    // Handle "Trang chủ" or root
+    if (href === '/' || href === '#hero') {
+      navigate('/');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 80; // Account for fixed navbar height
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   const navItems = [
-    { label: 'Trang chủ', href: '#hero' },
+    { label: 'Trang chủ', href: '/' },
     { label: 'Ghẹ tươi sống', href: '#products' },
     { label: 'Ghẹ chế biến', href: '#products' },
     { label: 'Combo Giáng sinh', href: '#combos' },
     { label: 'Hải sản khác', href: '#categories' },
-    { label: 'Công thức / Blog', href: '#blog' },
+    { label: 'Công thức / Blog', href: '/blog' },
   ];
 
   return (
@@ -36,20 +93,22 @@ const Navbar = () => {
           {/* Logo */}
           <motion.div
             whileHover={{ scale: 1.05 }}
+            onClick={handleLogoClick}
             className="flex items-center gap-2 cursor-pointer"
           >
             <IconCrab className="w-8 h-8" />
-            <span className="text-2xl font-bold text-ocean-blue">Ghẹ Biển Noel</span>
+            <span className="text-2xl font-bold text-ocean-blue">Ghẹ Biển Hương Phi</span>
           </motion.div>
 
           {/* Navigation Menu */}
           <div className="hidden lg:flex items-center gap-8">
             {navItems.map((item) => (
               <motion.a
-                key={item.href}
+                key={`${item.href}-${item.label}`}
                 href={item.href}
+                onClick={(e) => handleNavClick(item.href, e)}
                 whileHover={{ y: -2 }}
-                className="text-gray-700 hover:text-christmas-red font-medium transition-colors"
+                className="text-gray-700 hover:text-christmas-red font-medium transition-colors cursor-pointer"
               >
                 {item.label}
               </motion.a>

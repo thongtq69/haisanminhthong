@@ -1,11 +1,24 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import Badge from './ui/Badge';
 import Rating from './ui/Rating';
 import Button from './ui/Button';
+import { safeImageUrl } from '../utils/safeImage';
 
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
+  
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN').format(price) + '₫';
+  };
+
+  const handleCardClick = () => {
+    navigate(`/product/${product.slug || product.id}`);
+  };
+
+  const handleButtonClick = (e) => {
+    e.stopPropagation();
+    navigate(`/product/${product.slug || product.id}`);
   };
 
   return (
@@ -19,13 +32,15 @@ const ProductCard = ({ product }) => {
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
         transition: { duration: 0.3 }
       }}
+      onClick={handleCardClick}
       className="bg-white rounded-xl shadow-md overflow-hidden group cursor-pointer transition-all duration-300"
     >
       <div className="relative h-64 overflow-hidden">
         <img
-          src={product.image}
+          src={safeImageUrl(product.image, product.name)}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+          onError={(e) => { e.currentTarget.src = safeImageUrl(null, product.name); }}
         />
         {product.badge && (
           <div className="absolute top-4 left-4">
@@ -73,9 +88,9 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
 
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleButtonClick}>
           <Button variant="primary" className="w-full">
-            Đặt Ngay
+            Xem chi tiết
           </Button>
         </motion.div>
       </div>

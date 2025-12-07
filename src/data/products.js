@@ -1,10 +1,14 @@
+const productPlaceholder = (text, start, end, width = 400, height = 300) =>
+  `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><defs><linearGradient id="grad" x1="0" x2="1" y1="0" y2="1"><stop stop-color="${encodeURIComponent(start)}" offset="0%"/><stop stop-color="${encodeURIComponent(end)}" offset="100%"/></linearGradient></defs><rect width="${width}" height="${height}" fill="url(%23grad)"/><text x="50%" y="50%" fill="white" font-size="20" font-family="Arial" text-anchor="middle" dominant-baseline="middle">${encodeURIComponent(text)}</text></svg>`;
+
 export const products = [
   {
     id: 1,
     name: 'Ghẹ Xanh Cao Cấp (1kg)',
+    slug: 'ghe-xanh-cao-cap-1kg',
     price: 450000,
     originalPrice: 550000,
-    image: 'https://via.placeholder.com/400x300/1565C0/FFFFFF?text=Ghe+Xanh+1kg',
+    image: productPlaceholder('Ghẹ Xanh 1kg', '#1565C0', '#1E88E5'),
     rating: 4.8,
     reviews: 124,
     badge: 'Bán chạy',
@@ -16,9 +20,10 @@ export const products = [
   {
     id: 2,
     name: 'Ghẹ Đỏ Tươi Sống (800g)',
+    slug: 'ghe-do-tuoi-song-800g',
     price: 380000,
     originalPrice: 450000,
-    image: 'https://via.placeholder.com/400x300/E53935/FFFFFF?text=Ghe+Do+800g',
+    image: productPlaceholder('Ghẹ Đỏ 800g', '#E53935', '#FF3B3F'),
     rating: 4.9,
     reviews: 89,
     badge: 'Giảm Noel',
@@ -30,9 +35,10 @@ export const products = [
   {
     id: 3,
     name: 'Ghẹ Sữa Tươi (1.2kg)',
+    slug: 'ghe-sua-tuoi-1-2kg',
     price: 520000,
     originalPrice: null,
-    image: 'https://via.placeholder.com/400x300/1E88E5/FFFFFF?text=Ghe+Sua+1.2kg',
+    image: productPlaceholder('Ghẹ Sữa 1.2kg', '#1E88E5', '#1565C0'),
     rating: 4.7,
     reviews: 156,
     badge: 'Mới',
@@ -44,9 +50,10 @@ export const products = [
   {
     id: 4,
     name: 'Ghẹ Thịt Cao Cấp (1kg)',
+    slug: 'ghe-thit-cao-cap-1kg',
     price: 480000,
     originalPrice: 580000,
-    image: 'https://via.placeholder.com/400x300/FF3B3F/FFFFFF?text=Ghe+Thit+1kg',
+    image: productPlaceholder('Ghẹ Thịt 1kg', '#FF3B3F', '#E53935'),
     rating: 4.6,
     reviews: 203,
     badge: 'Bán chạy',
@@ -58,9 +65,10 @@ export const products = [
   {
     id: 5,
     name: 'Ghẹ Hấp Sẵn',
+    slug: 'ghe-hap-san',
     price: 350000,
     originalPrice: 420000,
-    image: 'https://via.placeholder.com/400x300/E53935/FFFFFF?text=Ghe+Hap+San',
+    image: productPlaceholder('Ghẹ Hấp Sẵn', '#E53935', '#FF3B3F'),
     rating: 4.9,
     reviews: 312,
     badge: 'Giảm Noel',
@@ -72,9 +80,10 @@ export const products = [
   {
     id: 6,
     name: 'Ghẹ Nướng Bơ Tỏi',
+    slug: 'ghe-nuong-bo-toi',
     price: 420000,
     originalPrice: null,
-    image: 'https://via.placeholder.com/400x300/1E88E5/FFFFFF?text=Ghe+Nuong+Bo',
+    image: productPlaceholder('Ghẹ Nướng Bơ Tỏi', '#1E88E5', '#1565C0'),
     rating: 4.8,
     reviews: 178,
     badge: 'Mới',
@@ -86,9 +95,10 @@ export const products = [
   {
     id: 7,
     name: 'Combo Canh Ghẹ',
+    slug: 'combo-canh-ghe',
     price: 280000,
     originalPrice: 350000,
-    image: 'https://via.placeholder.com/400x300/1565C0/FFFFFF?text=Canh+Ghe',
+    image: productPlaceholder('Canh Ghẹ', '#1565C0', '#1E88E5'),
     rating: 4.7,
     reviews: 95,
     badge: 'Bán chạy',
@@ -100,9 +110,10 @@ export const products = [
   {
     id: 8,
     name: 'Combo Ghẹ Cao Cấp (2kg)',
+    slug: 'combo-ghe-cao-cap-2kg',
     price: 850000,
     originalPrice: 1050000,
-    image: 'https://via.placeholder.com/400x300/E53935/FFFFFF?text=Combo+Ghe+2kg',
+    image: productPlaceholder('Combo Ghẹ 2kg', '#E53935', '#FF3B3F'),
     rating: 5.0,
     reviews: 67,
     badge: 'Giảm Noel',
@@ -114,9 +125,10 @@ export const products = [
   {
     id: 9,
     name: 'Ghẹ Xanh Tươi Sống (1.5kg)',
+    slug: 'ghe-xanh-tuoi-song-1-5kg',
     price: 650000,
     originalPrice: 750000,
-    image: 'https://via.placeholder.com/400x300/1565C0/FFFFFF?text=Ghe+Xanh+Song',
+    image: productPlaceholder('Ghẹ Xanh Sống', '#1565C0', '#1E88E5'),
     rating: 4.9,
     reviews: 142,
     badge: 'Bán chạy',
@@ -128,9 +140,10 @@ export const products = [
   {
     id: 10,
     name: 'Ghẹ Cà Ri Sẵn',
+    slug: 'ghe-ca-ri-san',
     price: 320000,
     originalPrice: 380000,
-    image: 'https://via.placeholder.com/400x300/FF3B3F/FFFFFF?text=Ghe+Ca+Ri',
+    image: productPlaceholder('Ghẹ Cà Ri', '#FF3B3F', '#E53935'),
     rating: 4.8,
     reviews: 201,
     badge: 'Giảm Noel',
@@ -142,9 +155,10 @@ export const products = [
   {
     id: 11,
     name: 'Combo Hải Sản Tổng Hợp',
+    slug: 'combo-hai-san-tong-hop',
     price: 680000,
     originalPrice: 850000,
-    image: 'https://via.placeholder.com/400x300/1E88E5/FFFFFF?text=Hai+San+Tong+Hop',
+    image: productPlaceholder('Hải Sản Tổng Hợp', '#1E88E5', '#1565C0'),
     rating: 4.9,
     reviews: 98,
     badge: 'Mới',
@@ -156,9 +170,10 @@ export const products = [
   {
     id: 12,
     name: 'Chả Ghẹ (6 miếng)',
+    slug: 'cha-ghe-6-mieng',
     price: 250000,
     originalPrice: 300000,
-    image: 'https://via.placeholder.com/400x300/E53935/FFFFFF?text=Cha+Ghe',
+    image: productPlaceholder('Chả Ghẹ', '#E53935', '#FF3B3F'),
     rating: 4.7,
     reviews: 167,
     badge: 'Bán chạy',
@@ -168,4 +183,3 @@ export const products = [
     description: 'Chả ghẹ giòn rụm với sốt chấm đặc biệt',
   },
 ];
-

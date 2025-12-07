@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { categories } from '../data/categories';
+import { getCategories } from '../api/categories';
+import { safeImageUrl } from '../utils/safeImage';
 
 const CategoryCard = ({ category, index }) => {
   const ref = useRef(null);
@@ -13,11 +15,11 @@ const CategoryCard = ({ category, index }) => {
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      whileHover={{ 
-        y: -12, 
+      whileHover={{
+        y: -12,
         scale: 1.05,
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)',
-        transition: { duration: 0.3 }
+        transition: { duration: 0.3 },
       }}
       className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer group transition-all duration-300"
     >
@@ -45,6 +47,33 @@ const CategoryCard = ({ category, index }) => {
 };
 
 const CategorySection = () => {
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        // Transform data to match CategoryCard format
+        const transformedData = (data || []).map((cat) => ({
+          id: cat._id,
+          name: cat.name,
+          icon: cat.icon || '🦀',
+          image: safeImageUrl(cat.image || cat.images?.[0], cat.name),
+          description: cat.description || '',
+        }));
+        setCategories(transformedData);
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+        setCategories([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
     <section id="categories" className="py-20 bg-light-blue">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -63,15 +92,20 @@ const CategorySection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-          {categories.map((category, index) => (
-            <CategoryCard key={category.id} category={category} index={index} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Đang tải danh mục...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {categories.map((category, index) => (
+              <CategoryCard key={category.id} category={category} index={index} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
 };
 
 export default CategorySection;
-

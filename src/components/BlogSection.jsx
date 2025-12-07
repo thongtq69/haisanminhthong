@@ -1,7 +1,8 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { blogPosts } from '../data/blog';
+import { getPosts } from '../api/blog';
 import Button from './ui/Button';
 
 const BlogCard = ({ post, index }) => {
@@ -44,8 +45,39 @@ const BlogCard = ({ post, index }) => {
 };
 
 const BlogSection = () => {
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await getPosts({ limit: 6 });
+        // Transform data to match BlogCard format
+        const transformedData = (response.data || []).map((post) => ({
+          id: post._id,
+          title: post.title,
+          excerpt: post.excerpt,
+          image: post.thumbnail,
+          date: new Date(post.publishedAt).toLocaleDateString('vi-VN', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          }),
+          category: post.tags?.[0] || 'Blog',
+        }));
+        setBlogPosts(transformedData);
+      } catch (err) {
+        console.error('Error fetching blog posts:', err);
+        setBlogPosts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   return (
     <section id="blog" className="py-20 bg-white">
@@ -65,11 +97,17 @@ const BlogSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post, index) => (
-            <BlogCard key={post.id} post={post} index={index} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Đang tải bài viết...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogPosts.map((post, index) => (
+              <BlogCard key={post.id} post={post} index={index} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

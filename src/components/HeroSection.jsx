@@ -87,7 +87,7 @@ const HeroSection = () => {
       ref={heroRef}
       className="relative h-screen overflow-hidden bg-gradient-to-b from-ocean-blue via-accent-blue to-light-blue"
     >
-      <h1 className="sr-only">Ghẹ Biển Noel - Ghẹ tươi sống, combo Giáng sinh, giao nhanh</h1>
+      <h1 className="sr-only">Ghẹ Biển Hương Phi - Ghẹ tươi sống, combo Giáng sinh, giao nhanh</h1>
       {/* Parallax Background Layers */}
       <motion.div
         style={{ y: backgroundY }}
