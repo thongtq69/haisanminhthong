@@ -1,12 +1,22 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// Get API URL from environment variable
+// In development: VITE_API_URL=http://localhost:5000/api
+// In production (Vercel): VITE_API_URL=https://be-haisanminhthong.onrender.com/api
+const API_URL = import.meta.env.VITE_API_URL;
+
+if (!API_URL) {
+  console.error(
+    '⚠️ VITE_API_URL is not set! Please create .env.development file or set environment variable in Vercel.'
+  );
+}
 
 const client = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // Enable credentials for CORS
 });
 
 // Add request interceptor for logging

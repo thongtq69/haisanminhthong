@@ -60,20 +60,47 @@ seafood-crab-homepage/
    npm install
    ```
 
-2. **Start development server:**
+2. **Environment Variables:**
+   
+   File `.env.development` (cho local development):
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   ```
+   
+   File này đã có sẵn trong project. Nếu chưa có, tạo file `.env.development` với nội dung trên.
+
+3. **Start development server:**
    ```bash
    npm run dev
    ```
+   
+   Frontend sẽ chạy tại: `http://localhost:5173`
 
-3. **Build for production:**
+4. **Build for production:**
    ```bash
    npm run build
    ```
 
-4. **Preview production build:**
+5. **Preview production build:**
    ```bash
    npm run preview
    ```
+
+## Deploy lên Vercel
+
+1. **Connect repository** trên Vercel Dashboard
+2. **Set Environment Variables:**
+   ```
+   VITE_API_URL=https://be-haisanminhthong.onrender.com/api
+   ```
+3. **Build Command:** `npm run build`
+4. **Output Directory:** `dist`
+5. **Frontend URL:** `https://haisanminhthong.vercel.app`
+
+**Lưu ý quan trọng:**
+- `VITE_API_URL` phải được set trên Vercel Environment Variables
+- Vercel sẽ tự động build với biến môi trường này
+- Không cần sửa code khi deploy, chỉ cần set biến môi trường trên Vercel
 
 ## Key Features Explained
 
