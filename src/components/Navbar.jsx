@@ -1,22 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { IconCrab, IconBell } from './ui/Icons';
+import { IconBell } from './ui/Icons';
 import Badge from './ui/Badge';
+import LogoGheBienPng from '../assets/brand/logo-ghe-bien-huong-phi.png';
+import LogoGheBienSvg from '../assets/brand/logo-ghe-bien-huong-phi.svg';
+import { SITE_NAME, LOGO_ALT } from '../config/brand';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isScrolled, setIsScrolled] = useState(false);
   const isHomePage = location.pathname === '/';
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleLogoClick = () => {
     navigate('/');
@@ -84,20 +78,34 @@ const Navbar = () => {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/95 shadow-lg backdrop-blur-md' : 'bg-transparent'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg backdrop-blur-md transition-all duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <motion.div
             whileHover={{ scale: 1.05 }}
-            onClick={handleLogoClick}
-            className="flex items-center gap-2 cursor-pointer"
+            className="flex items-center gap-3 cursor-pointer"
           >
-            <IconCrab className="w-8 h-8" />
-            <span className="text-2xl font-bold text-ocean-blue">Ghẹ Biển Hương Phi</span>
+            {/* Logo hiện tại là placeholder SVG.
+                Khi có logo chính thức, hãy thay file tại: src/assets/brand/logo-ghe-bien-huong-phi.png
+                Giữ nguyên tên file để không phải sửa lại code. */}
+            <Link
+              to="/"
+              onClick={handleLogoClick}
+              className="flex items-center gap-3"
+              aria-label={LOGO_ALT}
+            >
+              <img
+                src={LogoGheBienPng || LogoGheBienSvg}
+                alt={LOGO_ALT}
+                className="h-12 w-auto md:h-14 drop-shadow-sm"
+                loading="lazy"
+              />
+              <span className="text-xl md:text-2xl font-extrabold tracking-wide text-ocean-blue uppercase">
+                {SITE_NAME}
+              </span>
+            </Link>
           </motion.div>
 
           {/* Navigation Menu */}

@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion';
-import { IconCrab, IconSnow, IconTree, IconBell } from './ui/Icons';
+import { IconSnow, IconTree, IconBell } from './ui/Icons';
+import LogoGheBienPng from '../assets/brand/logo-ghe-bien-huong-phi.png';
+import LogoGheBienSvg from '../assets/brand/logo-ghe-bien-huong-phi.svg';
+import { SITE_NAME, SITE_TAGLINE, LOGO_ALT } from '../config/brand';
 
 const Footer = () => {
   const footerLinks = {
@@ -44,10 +47,21 @@ const Footer = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="flex items-center gap-2 mb-4"
+              className="flex items-center gap-3 mb-4"
             >
-              <IconCrab className="w-8 h-8" />
-              <span className="text-2xl font-bold">Ghẹ Biển Hương Phi</span>
+              {/* Logo hiện tại là placeholder PNG (có fallback SVG).
+                  Khi có logo chính thức, hãy thay file tại: src/assets/brand/logo-ghe-bien-huong-phi.png
+                  Giữ nguyên tên file để không phải sửa lại code. */}
+              <img
+                src={LogoGheBienPng || LogoGheBienSvg}
+                alt={LOGO_ALT}
+                className="h-10 w-auto drop-shadow-sm"
+                loading="lazy"
+              />
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold leading-tight">{SITE_NAME}</span>
+                <span className="text-sm text-gray-200">{SITE_TAGLINE}</span>
+              </div>
             </motion.div>
             <p className="text-gray-300 mb-4">
               Nguồn cung cấp ghẹ tươi và hải sản cao cấp đáng tin cậy của bạn. 
@@ -151,7 +165,7 @@ const Footer = () => {
           viewport={{ once: true }}
           className="border-t border-white/20 pt-8 mt-8 text-center text-gray-400"
         >
-          <p>&copy; 2024 Ghẹ Biển Hương Phi. Tất cả quyền được bảo lưu.</p>
+          <p>&copy; 2024 {SITE_NAME}. Tất cả quyền được bảo lưu.</p>
         </motion.div>
       </div>
     </footer>

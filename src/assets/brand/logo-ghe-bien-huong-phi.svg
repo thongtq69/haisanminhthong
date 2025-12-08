@@ -1,0 +1,21 @@
+<!--
+  TODO: Sau này thay nội dung file này bằng logo chính thức (giữ nguyên tên file logo-ghe-bien-huong-phi.svg)
+  Placeholder SVG tối giản.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="crabGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F9BD7" />
+      <stop offset="100%" stop-color="#06C4B4" />
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="94" stroke="url(#crabGradient)" stroke-width="8" fill="none" />
+  <path d="M70 110c0-18 14-32 30-32s30 14 30 32" stroke="url(#crabGradient)" stroke-width="10" stroke-linecap="round" />
+  <path d="M70 110c-6 4-16 10-26 12 8 6 20 12 32 10" stroke="url(#crabGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M130 110c6 4 16 10 26 12-8 6-20 12-32 10" stroke="url(#crabGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="85" cy="92" r="6" fill="#0F9BD7" />
+  <circle cx="115" cy="92" r="6" fill="#0F9BD7" />
+  <path d="M95 126c3 2 7 2 10 0" stroke="url(#crabGradient)" stroke-width="6" stroke-linecap="round" />
+  <path d="M60 82c-6-6-12-16-10-26 8 2 16 8 20 14" stroke="url(#crabGradient)" stroke-width="6" stroke-linecap="round" />
+  <path d="M140 82c6-6 12-16 10-26-8 2-16 8-20 14" stroke="url(#crabGradient)" stroke-width="6" stroke-linecap="round" />
+</svg>

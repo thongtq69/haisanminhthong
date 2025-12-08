@@ -141,8 +141,8 @@ const FlashSaleSection = () => {
             <p className="text-white">Đang tải combo...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {combos.map((combo, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {combos.map((combo, index) => (
             <motion.div
               key={combo.id}
               initial={{ opacity: 0, y: 50 }}
@@ -194,7 +194,7 @@ const FlashSaleSection = () => {
               </div>
             </motion.div>
           ))}
-          </div>
+        </div>
         )}
       </div>
     </section>
