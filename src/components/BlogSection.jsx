@@ -21,7 +21,7 @@ const BlogCard = ({ post, index }) => {
       <div className="relative h-48 overflow-hidden">
         <img
           src={post.image}
-          alt={post.title}
+          alt={`Bài viết hải sản Ghẹ Biển Hương Phi - ${post.title}`}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />
         <div className="absolute top-4 left-4">
@@ -114,4 +114,3 @@ const BlogSection = () => {
 };
 
 export default BlogSection;
-

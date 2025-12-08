@@ -154,7 +154,7 @@ const FlashSaleSection = () => {
               <div className="relative h-48 overflow-hidden">
                 <img
                   src={combo.image}
-                  alt={combo.name}
+                  alt={`Combo ghẹ biển tươi sống - ${combo.name}`}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-4 right-4">
@@ -202,4 +202,3 @@ const FlashSaleSection = () => {
 };
 
 export default FlashSaleSection;
-

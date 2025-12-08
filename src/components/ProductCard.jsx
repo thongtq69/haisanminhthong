@@ -38,7 +38,7 @@ const ProductCard = ({ product }) => {
       <div className="relative h-64 overflow-hidden">
         <img
           src={safeImageUrl(product.image, product.name)}
-          alt={product.name}
+          alt={`Hải sản tươi sống - ${product.name}`}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           onError={(e) => { e.currentTarget.src = safeImageUrl(null, product.name); }}
         />
