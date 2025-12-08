@@ -1,96 +1,125 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import { getPostBySlug, getPosts } from '../api/blog';
+import { useParams, Link } from 'react-router-dom';
+import { getPostBySlug } from '../api/blog';
 
-const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('vi-VN');
-const placeholderSvg = (title) =>
-  `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600"><defs><linearGradient id="grad" x1="0" x2="1" y1="0" y2="1"><stop stop-color="%231565C0" offset="0%"/><stop stop-color="%23E53935" offset="100%"/></linearGradient></defs><rect width="1200" height="600" fill="url(%23grad)"/><text x="50%" y="50%" fill="white" font-size="36" font-family="Arial" text-anchor="middle" dominant-baseline="middle">${encodeURIComponent(title)}</text></svg>`;
+const formatDate = (dateStr) =>
+  dateStr
+    ? new Date(dateStr).toLocaleDateString('vi-VN', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    : '';
+
+const renderContent = (content) => {
+  if (typeof content === 'string') {
+    const trimmed = content.trim();
+    const looksHtml = /<\/?[a-z][\s\S]*>/i.test(trimmed);
+
+    if (looksHtml) {
+      return (
+        <div
+          className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: trimmed }}
+        />
+      );
+    }
+
+    return trimmed
+      .split('\n\n')
+      .filter(Boolean)
+      .map((block, idx) => (
+        <p key={idx} className="text-gray-700 leading-relaxed mb-4">
+          {block}
+        </p>
+      ));
+  }
+  return null;
+};
 
 const BlogDetailPage = () => {
   const { slug } = useParams();
-  const navigate = useNavigate();
   const [post, setPost] = useState(null);
-  const [related, setRelated] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const fallbackImg = (title = 'Bài viết hải sản') =>
+    `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="800" height="450" fill="%231565C0"/><text x="50%" y="50%" fill="white" font-size="22" font-family="Arial" text-anchor="middle" dominant-baseline="middle">${encodeURIComponent(
+      title
+    )}</text></svg>`;
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchDetail = async () => {
+      let found = null;
       try {
         const data = await getPostBySlug(slug);
-        setPost(data);
-        const rel = await getPosts({ category: data.category, limit: 5, status: 'published' });
-        setRelated((rel.items || []).filter((p) => p.slug !== slug));
-        document.title = data.seoTitle || data.title;
+        if (data && (data.slug || data.title || data.id)) {
+          found = data;
+        }
       } catch (err) {
-        console.error(err);
-        navigate('/blog');
+        console.error('Error loading post detail', err);
+      } finally {
+        setPost(found);
+        setLoading(false);
       }
     };
-    fetchPost();
-  }, [slug, navigate]);
+    fetchDetail();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-snow-bg pt-24 pb-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-gray-600">Đang tải...</p>
+        </div>
+      </main>
+    );
+  }
 
   if (!post) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-snow-bg pt-20">
-        <p>Đang tải bài viết...</p>
+      <main className="min-h-screen bg-snow-bg pt-24 pb-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p>Không tìm thấy bài viết.</p>
+          <Link to="/blog" className="text-ocean-blue font-semibold hover:underline mt-4 inline-block">
+            ← Quay lại danh sách blog
+          </Link>
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="bg-snow-bg min-h-screen pt-24 pb-12">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="text-sm text-gray-600 flex gap-2">
-          <Link to="/" className="hover:text-christmas-red">Trang chủ</Link>
-          <span>/</span>
-          <Link to="/blog" className="hover:text-christmas-red">Blog</Link>
-          <span>/</span>
-          <span className="text-gray-900 font-medium">{post.title}</span>
-        </div>
+    <main className="min-h-screen bg-snow-bg pt-24 pb-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <Link to="/blog" className="text-ocean-blue font-semibold hover:underline inline-block">
+          ← Quay lại danh sách blog
+        </Link>
 
-        <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            {post.category && <span className="px-3 py-1 bg-ocean-blue/10 text-ocean-blue rounded-full text-xs">{post.category}</span>}
-            <span className="text-sm text-gray-600">{formatDate(post.publishedAt || post.createdAt)}</span>
+        <header className="space-y-3">
+          <p className="text-sm text-gray-600">
+            {formatDate(post.publishedAt || post.createdAt)}
+          </p>
+          <h1 className="text-4xl font-bold text-gray-900 leading-tight">
+            {post.title}
+          </h1>
+        </header>
+
+        {(post.image || post.thumbnail || post.coverImage) && (
+          <div className="overflow-hidden rounded-xl shadow-md">
+            <img
+              src={post.image || post.thumbnail || post.coverImage}
+              alt={`Bài viết hải sản Ghẹ Biển Hương Phi - ${post.title}`}
+              className="w-full h-auto object-cover"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = fallbackImg(post.title);
+              }}
+            />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900">{post.title}</h1>
-          <p className="text-lg text-gray-700">{post.excerpt}</p>
-        </div>
+        )}
 
-        <div className="rounded-xl overflow-hidden shadow-lg">
-          <img
-            src={post.coverImage || post.thumbnail || placeholderSvg(post.title)}
-            alt={post.title}
-            className="w-full h-96 object-cover"
-          />
-        </div>
-
-        <article
-          className="prose max-w-none prose-lg bg-white p-6 rounded-xl shadow"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
-
-        <section className="bg-white p-6 rounded-xl shadow space-y-3">
-          <h3 className="text-xl font-bold text-gray-900">Bài viết liên quan</h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            {related.map((r) => (
-              <Link key={r._id} to={`/blog/${r.slug}`} className="block border rounded-lg p-3 hover:border-ocean-blue">
-                <div className="flex gap-3">
-                  <div className="w-24 h-20 rounded bg-gray-100 overflow-hidden">
-                    <img
-                      src={r.coverImage || r.thumbnail || placeholderSvg(r.title)}
-                      alt={r.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm text-gray-600">{formatDate(r.publishedAt || r.createdAt)}</div>
-                    <div className="font-semibold text-gray-900 line-clamp-2">{r.title}</div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
+        <article className="bg-white rounded-xl shadow-md p-6 space-y-4">
+          {renderContent(post.content || post.body || post.contentHtml || '')}
+        </article>
       </div>
     </main>
   );

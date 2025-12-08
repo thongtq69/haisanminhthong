@@ -13,8 +13,10 @@ const BlogFormPage = () => {
     category: '',
     tags: '',
     coverImage: '',
+    shortDescription: '',
     excerpt: '',
     content: '',
+    galleryImages: '',
     isFeatured: false,
     status: 'draft',
     publishedAt: '',
@@ -34,8 +36,10 @@ const BlogFormPage = () => {
         category: data.category || '',
         tags: (data.tags || []).join(', '),
         coverImage: data.coverImage || data.thumbnail || '',
+        shortDescription: data.shortDescription || data.excerpt || '',
         excerpt: data.excerpt || '',
         content: data.content || '',
+        galleryImages: (data.galleryImages || []).join(','),
         isFeatured: data.isFeatured || false,
         status: data.status || 'draft',
         publishedAt: data.publishedAt ? data.publishedAt.substring(0, 16) : '',
@@ -69,6 +73,11 @@ const BlogFormPage = () => {
     const payload = {
       ...form,
       status: statusOverride || form.status,
+      shortDescription: form.shortDescription || form.excerpt,
+      galleryImages: form.galleryImages
+        .split(',')
+        .map((i) => i.trim())
+        .filter(Boolean),
       tags: form.tags
         .split(',')
         .map((t) => t.trim())
@@ -111,51 +120,64 @@ const BlogFormPage = () => {
             value={form.title}
             onChange={handleChange('title')}
           />
-          <input
-            className="w-full border rounded-lg px-3 py-2"
-            placeholder="Slug (để trống để tự tạo)"
-            value={form.slug}
-            onChange={handleChange('slug')}
-          />
-          <input
-            className="w-full border rounded-lg px-3 py-2"
-            placeholder="Category"
-            value={form.category}
-            onChange={handleChange('category')}
-          />
+        <input
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Slug (để trống để tự tạo)"
+          value={form.slug}
+          onChange={handleChange('slug')}
+        />
+        <input
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Mô tả ngắn (short description)"
+          value={form.shortDescription}
+          onChange={handleChange('shortDescription')}
+        />
+        <input
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Category"
+          value={form.category}
+          onChange={handleChange('category')}
+        />
           <input
             className="w-full border rounded-lg px-3 py-2"
             placeholder="Tags (phân cách bằng dấu phẩy)"
             value={form.tags}
             onChange={handleChange('tags')}
           />
-          <input
-            className="w-full border rounded-lg px-3 py-2"
-            placeholder="Cover image URL"
-            value={form.coverImage}
-            onChange={handleChange('coverImage')}
-          />
+        <input
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Cover image URL"
+          value={form.coverImage}
+          onChange={handleChange('coverImage')}
+        />
           <div className="flex items-center gap-3 text-sm text-gray-600">
             <input type="file" accept="image/*" onChange={(e) => handleCoverFile(e.target.files)} />
             <span className="text-xs">Chọn ảnh từ máy/điện thoại, sẽ upload lên Cloudinary</span>
             {uploading && <span className="text-xs text-ocean-blue">Đang upload...</span>}
           </div>
-          <textarea
-            className="w-full border rounded-lg px-3 py-2"
-            rows={3}
-            placeholder="Excerpt"
-            value={form.excerpt}
-            onChange={handleChange('excerpt')}
-          />
-        </div>
+        <textarea
+          className="w-full border rounded-lg px-3 py-2"
+          rows={3}
+          placeholder="Excerpt"
+          value={form.excerpt}
+          onChange={handleChange('excerpt')}
+        />
+        <textarea
+          className="w-full border rounded-lg px-3 py-2"
+          rows={3}
+          placeholder="Gallery images (phân cách dấu phẩy)"
+          value={form.galleryImages}
+          onChange={handleChange('galleryImages')}
+        />
+      </div>
 
-        <div className="space-y-3">
-          <textarea
-            className="w-full border rounded-lg px-3 py-2 h-48"
-            placeholder="Content (HTML/Markdown)"
-            value={form.content}
-            onChange={handleChange('content')}
-          />
+      <div className="space-y-3">
+        <textarea
+          className="w-full border rounded-lg px-3 py-2 h-48"
+          placeholder="Content (HTML/Markdown)"
+          value={form.content}
+          onChange={handleChange('content')}
+        />
           <div className="flex items-center gap-2">
             <input
               type="checkbox"

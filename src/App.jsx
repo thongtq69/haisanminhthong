@@ -15,10 +15,11 @@ import AdminBlogListPage from './admin/pages/blog/BlogListPage';
 import AdminBlogFormPage from './admin/pages/blog/BlogFormPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
-import BlogListPublicPage from './pages/BlogListPage';
+import BlogListPage from './pages/BlogListPage';
 import BlogDetailPage from './pages/BlogDetailPage';
 import { CartProvider } from './context/CartContext';
 import ScrollToTop from './components/ScrollToTop';
+import AdminApp from './admin/AdminApp';
 
 function App() {
   return (
@@ -39,7 +40,7 @@ function App() {
                     path="/danh-muc-ghe-hai-san"
                     element={<CrabAndSeafoodCategoryPage />}
                   />
-                  <Route path="/blog" element={<BlogListPublicPage />} />
+                  <Route path="/blog" element={<BlogListPage />} />
                   <Route path="/blog/:slug" element={<BlogDetailPage />} />
                   <Route path="/checkout" element={<CheckoutPage />} />
                   <Route path="/order-success/:id" element={<OrderSuccessPage />} />
@@ -64,6 +65,9 @@ function App() {
           <Route path="blog/create" element={<AdminBlogFormPage />} />
           <Route path="blog/:id/edit" element={<AdminBlogFormPage />} />
         </Route>
+
+        {/* React Admin standalone (không dùng layout shop) */}
+        <Route path="/admin/ra/*" element={<AdminApp />} />
       </Routes>
     </Router>
   );
